@@ -168,39 +168,6 @@ mark.hl.flash{outline:2px solid var(--accent);outline-offset:2px}
 #pop .sw{width:20px;height:20px;border-radius:50%;padding:0;border:1px solid rgba(0,0,0,.15)}
 #pop .sw.y{background:var(--mark)} #pop .sw.q{background:var(--mark-b)} #pop .sw.k{background:var(--mark-r)}
 
-/* ── 번역 가리기 (영어 우선 읽기) */
-body[data-veil="on"] .pair .ko{display:none}
-body[data-veil="on"] .pair.veil-open .ko{display:block}
-body[data-veil="on"] .pair .en{cursor:pointer;border-radius:5px;transition:background .1s}
-body[data-veil="on"] .pair .en:hover{background:var(--accent-soft)}
-body[data-veil="on"] .pair.veil-open .en{color:var(--ink)}
-body[data-veil="on"] .pair.veil-open .ko{border-left:2px solid var(--accent);padding-left:10px;
-  margin-top:4px;color:var(--ink-2)}
-/* 논문 조판에서는 흐름을 건드리지 않고 쪽지로 띄운다 */
-body[data-veil="on"][data-view^="paper"] .pair.veil-open .ko{display:none}
-body[data-veil="on"][data-view^="paper"] .pair.veil-open .en{background:var(--mark)}
-body[data-veil="on"][data-view="ko"] .pair .ko,
-body[data-veil="on"][data-view="paperko"] .pair .ko{display:inline}
-#veilbtn[aria-pressed="true"]{background:var(--accent);color:#fff;border-color:var(--accent)}
-
-#tpop{position:absolute;z-index:78;display:none;max-width:min(400px,88vw);padding:12px 15px;
-  background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--accent);
-  border-radius:11px;box-shadow:0 10px 34px rgba(0,0,0,.2);font-size:.86rem;line-height:1.7;
-  color:var(--ink);font-family:var(--sans);text-align:left;text-indent:0}
-#tpop.on{display:block}
-#tpop .tclose{float:right;margin:-4px -6px 0 8px;border:0;background:transparent;cursor:pointer;
-  color:var(--muted);font-size:.9rem}
-
-.stuckbox{border:1px solid var(--line);border-radius:10px;padding:10px 12px;margin-bottom:12px;
-  background:var(--accent-soft)}
-.stuckbox .sh{display:flex;align-items:center;gap:8px;font-size:.78rem;color:var(--accent);
-  font-weight:600;margin-bottom:6px}
-.stuckbox .sh button{margin-left:auto;border:0;background:transparent;color:var(--muted);
-  font-size:.72rem;cursor:pointer;font-family:var(--sans)}
-.stuckbox .si{font-size:.78rem;line-height:1.5;color:var(--ink-2);padding:5px 0;cursor:pointer;
-  border-top:1px solid var(--line)}
-.stuckbox .si:hover{color:var(--accent)}
-
 /* ── 노트 패널 */
 #notes{position:fixed;top:56px;right:0;bottom:0;width:min(92vw,360px);z-index:58;background:var(--panel);
   border-left:1px solid var(--line);transform:translateX(101%);transition:transform .22s;
@@ -446,8 +413,6 @@ main a{color:var(--accent)}
   #helpbtn{display:none}
   .iconbtn{width:32px}
   .iconbtn.wideonly{display:none}      /* 가이드 토글·글자 크기는 데스크톱에서만 */
-  #theme{display:none}                 /* 다크모드는 시스템 설정을 따른다 */
-  #tpop{position:fixed;left:10px;right:10px;bottom:14px;top:auto;max-width:none}
   .seg button{padding:6px 7px;font-size:.73rem}
   .seg button.wideonly{display:none}   /* 2단은 넓은 화면에서만 의미가 있다 */
   /* 용어 정의는 화면 아래 띠로 — 오른쪽 끝 단어에서도 잘리지 않는다 */
@@ -502,7 +467,6 @@ main a{color:var(--accent)}
     <button data-view="paperko" title="한글판 2단 조판 (P를 다시 누르면 전환)"><span class="lg">논문·한글</span><span class="sm">논한</span></button>
   </div>
   <button class="iconbtn wideonly" id="guidebtn" title="공부 가이드 켜기/끄기 (G)">✦</button>
-  <button class="iconbtn" id="veilbtn" aria-pressed="false" title="번역 가리고 영어 먼저 읽기 (H)">가림</button>
   <button class="iconbtn" id="notesbtn" title="내 노트 (N)">✎<span id="notecount"></span></button>
   <button class="iconbtn wideonly" id="fsdown" title="글자 작게">A−</button>
   <button class="iconbtn wideonly" id="fsup" title="글자 크게">A+</button>
@@ -920,8 +884,6 @@ main a{color:var(--accent)}
 
 <div id="lb"><img alt=""><div class="lbtip">그림을 누르면 원본 크기 · 배경 또는 <b>Esc</b>로 닫기</div></div>
 
-<div id="tpop"></div>
-
 <div id="pop">
   <button class="sw y" data-c="" title="중요 (노랑)"></button>
   <button class="sw q" data-c="c-q" title="질문 (파랑)"></button>
@@ -946,7 +908,7 @@ main a{color:var(--accent)}
   <b>단축키</b><br>
   <kbd>1</kbd> 교차 <kbd>2</kbd> 2단 <kbd>3</kbd> 한글 <kbd>4</kbd> English<br><kbd>P</kbd> 논문 조판 (다시 누르면 한글판)<br>
   <kbd>J</kbd>/<kbd>K</kbd> 다음/이전 섹션 · <kbd>M</kbd> 목차<br>
-  <kbd>H</kbd> 번역 가리기 · <kbd>N</kbd> 노트 · <kbd>G</kbd> 가이드 · <kbd>T</kbd> 테마<br>
+  <kbd>N</kbd> 내 노트 · <kbd>G</kbd> 가이드 · <kbd>T</kbd> 테마<br>
   <kbd>+</kbd>/<kbd>−</kbd> 글자 크기<br>
   <b>문장 드래그</b> = 형광펜 · 형광펜 클릭 = 수정
 </div>
@@ -1018,66 +980,14 @@ main a{color:var(--accent)}
   addEventListener('scroll',function(){ if(!tick){ tick=true; requestAnimationFrame(function(){ spy(); tick=false; }); } },{passive:true});
   addEventListener('resize',spy); spy();
 
-  /* ── 번역 가리기 (영어 우선 읽기) ─────────────────── */
-  var STUCK=[];
-  function stuckLoad(){ try{ STUCK=JSON.parse(LS.getItem('jc2009.stuck')||'[]'); }catch(e){ STUCK=[]; } }
-  function stuckSave(){ try{ LS.setItem('jc2009.stuck',JSON.stringify(STUCK)); }catch(e){} renderNotes(); }
-  function stuckAdd(p){
-    var k=p.dataset.key;
-    if(STUCK.some(function(x){ return x.key===k; })) return;
-    var en=p.querySelector('.en'), txt='';
-    if(en){ var c=en.cloneNode(true);
-      c.querySelectorAll('.katex-mathml').forEach(function(x){ x.remove(); });  /* 수식이 두 번 세어지는 것 방지 */
-      txt=c.textContent.replace(/\s+/g,' ').trim(); }
-    STUCK.push({key:k, ord:+p.dataset.ord, sec:p.dataset.sec||'', en:txt.slice(0,110)});
-    stuckSave();
-  }
-  function setVeil(on){
-    document.body.dataset.veil = on?'on':'off';
-    $('#veilbtn').setAttribute('aria-pressed', on?'true':'false');
-    S.set('veil', on?'on':'off');
-    if(!on){ $$('.pair.veil-open').forEach(function(p){ p.classList.remove('veil-open'); }); hideTPop(); }
-  }
-  var tpop=$('#tpop');
-  function hideTPop(){ tpop.classList.remove('on'); }
-  function showTPop(p, ev){
-    var ko=p.querySelector('.ko'); if(!ko) return;
-    tpop.innerHTML='<button class="tclose" title="닫기">✕</button>'+ko.innerHTML;
-    tpop.classList.add('on');
-    if(innerWidth>700){
-      var r=p.getBoundingClientRect(), w=tpop.offsetWidth;
-      tpop.style.left=Math.max(10,Math.min(innerWidth-w-10,(ev?ev.clientX:r.left)-w/2))+'px';
-      tpop.style.top=(r.bottom+scrollY+8)+'px';
-    }
-  }
-  tpop.addEventListener('click',function(e){ if(e.target.closest('.tclose')) hideTPop(); });
-
+  /* ── 문단 고정 강조 */
   $$('.pair').forEach(function(p){
     p.addEventListener('click',function(e){
       if(e.target.closest('a')) return;
       if(String(getSelection())) return;
-      if(document.body.dataset.veil==='on'){
-        var v=document.body.dataset.view;
-        if(v==='ko'||v==='paperko') return;            /* 한글판에서는 가릴 것이 없다 */
-        if(v.indexOf('paper')===0){
-          if(p.classList.contains('veil-open') && tpop.classList.contains('on')){
-            p.classList.remove('veil-open'); hideTPop();
-          } else {
-            $$('.pair.veil-open').forEach(function(q){ q.classList.remove('veil-open'); });
-            p.classList.add('veil-open'); showTPop(p,e); stuckAdd(p);
-          }
-        } else {
-          p.classList.toggle('veil-open');
-          if(p.classList.contains('veil-open')) stuckAdd(p);
-        }
-        return;
-      }
       p.classList.toggle('pin');
     });
   });
-  stuckLoad();
-  setVeil(S.get('veil','off')==='on');
-  $('#veilbtn').onclick=function(){ setVeil(document.body.dataset.veil!=='on'); };
 
   /* ── 그림 라이트박스 */
   var lb=$('#lb'), lbimg=$('#lb img');
@@ -1217,18 +1127,10 @@ main a{color:var(--accent)}
       if(t){ t.scrollIntoView({block:'center'}); t.focus(); }
     },60);
   }
-  function stuckHTML(){
-    if(!STUCK.length) return '';
-    var rows=STUCK.slice().sort(function(a,b){ return (a.ord||0)-(b.ord||0); })
-      .map(function(x){ return '<div class="si" data-goto="'+x.key+'">'+esc(x.en)+'…</div>'; }).join('');
-    return '<div class="stuckbox"><div class="sh">막힌 문장 '+STUCK.length+'개'
-         + '<button data-clearstuck="1">비우기</button></div>'+rows+'</div>';
-  }
   function renderNotes(){
     var n=ANN.length, c=$('#notecount');
-    c.textContent=n+STUCK.length; c.classList.toggle('on',(n+STUCK.length)>0);
-    if(!n){ nlist.innerHTML=stuckHTML()
-      +'<div class="empty">본문에서 문장을 <b>드래그</b>하면 형광펜과 메모를 남길 수 있습니다.<br><br>'
+    c.textContent=n; c.classList.toggle('on',n>0);
+    if(!n){ nlist.innerHTML='<div class="empty">본문에서 문장을 <b>드래그</b>하면 형광펜과 메모를 남길 수 있습니다.<br><br>'
       +'노랑 = 중요 · 파랑 = 질문 · 빨강 = 핵심<br>모은 내용은 “마크다운 복사”로 그대로 발표 대본이 됩니다.</div>'; return; }
     var sorted=ANN.slice().sort(function(a,b){ return (a.ord||0)-(b.ord||0); });
     var html='', sec=null;
@@ -1239,20 +1141,12 @@ main a{color:var(--accent)}
           + '<textarea data-for="'+a.id+'" placeholder="메모…">'+esc(a.note||'')+'</textarea>'
           + '<div class="nact"><button data-del="'+a.id+'">삭제</button></div></div>';
     });
-    nlist.innerHTML=stuckHTML()+html;
+    nlist.innerHTML=html;
   }
   function esc(s){ return String(s).replace(/[&<>"]/g,function(c){
     return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
 
   nlist.addEventListener('click',function(e){
-    var gt=e.target.closest('[data-goto]');
-    if(gt){
-      var el=document.querySelector('[data-key="'+gt.dataset.goto+'"]');
-      if(el){ el.scrollIntoView({block:'center',behavior:'smooth'});
-        el.classList.add('pin'); setTimeout(function(){ el.classList.remove('pin'); },1600); }
-      return;
-    }
-    if(e.target.closest('[data-clearstuck]')){ STUCK=[]; stuckSave(); return; }
     var go=e.target.closest('[data-go]'), del=e.target.closest('[data-del]');
     if(go){
       var mk=document.querySelector('mark[data-hid="'+go.dataset.go+'"]');
@@ -1278,15 +1172,9 @@ main a{color:var(--accent)}
     if(act==='close') openNotes(false);
     else if(act==='md'){
       var sorted=ANN.slice().sort(function(a,b2){ return (a.ord||0)-(b2.ord||0); });
-      if(!sorted.length && !STUCK.length){ toast('아직 표시한 내용이 없습니다'); return; }
+      if(!sorted.length){ toast('아직 표시한 내용이 없습니다'); return; }
       var LABEL={'':'중요','c-q':'질문','c-k':'핵심'}, sec=null;
       var md='# 저널클럽 노트 — Serrano et al. (2009)\n\n';
-      if(STUCK.length){
-        md+='## 다시 볼 영어 문장\n\n';
-        STUCK.slice().sort(function(a,b){return (a.ord||0)-(b.ord||0);}).forEach(function(x){
-          md+='- '+x.en+'…\n'; });
-        md+='\n';
-      }
       sorted.forEach(function(a){
         if(a.sec!==sec){ sec=a.sec; md+='\n## '+sec+'\n\n'; }
         md+='- **['+(LABEL[a.cls||'']||'중요')+']** '+a.text+'\n';
@@ -1352,7 +1240,7 @@ main a{color:var(--accent)}
     var tag=(e.target.tagName||'').toLowerCase();
     if(tag==='input'||tag==='textarea') return;
     var k=e.key;
-    if(k==='Escape'){ close(); hideTPop(); $('#help').classList.remove('on'); return; }
+    if(k==='Escape'){ close(); $('#help').classList.remove('on'); return; }
     /* 한글 입력 상태에서는 e.key가 'ㅔ' 같은 자모로 오므로 물리 키(e.code)를 우선 본다 */
     var code=e.code||'';
     var C = /^Key[A-Z]$/.test(code) ? code.slice(3).toLowerCase()
@@ -1365,7 +1253,6 @@ main a{color:var(--accent)}
     else if(C==='4') setView('en');
     else if(C==='5'||C==='p') setView(document.body.dataset.view==='paper'?'paperko':'paper');
     else if(C==='g') $('#guidebtn').click();
-    else if(C==='h') $('#veilbtn').click();
     else if(C==='n') openNotes();
     else if(C==='t') $('#theme').click();
     else if(C==='j') jump(1);
