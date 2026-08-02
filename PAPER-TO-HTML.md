@@ -444,3 +444,46 @@ EOF
 ```
 
 번역 md(3)와 가이드(7)가 시간의 대부분을 차지한다. 나머지는 30분 안쪽이다.
+
+
+---
+
+## 13. 영어 공부 페이지 (`study.html`)
+
+같은 번역 md에서 한 문장씩 학습하는 페이지를 따로 만든다. 논문 순서를 지키므로
+끝까지 하면 논문을 다 읽은 셈이 된다.
+
+```bash
+python3 build_study.py        # → study.html
+```
+
+논문마다 손볼 곳은 하나뿐이다 — **`clauses.py`**.
+
+1. 먼저 그냥 빌드하면 절 분해가 자동으로 붙는다(관계절·종속절·대시는 잘 잡는다).
+2. 자동 분해가 놓치는 건 **종속절이 끝나고 주절로 돌아오는 지점**이다.
+   40단어가 넘는 문장만 뽑아 눈으로 확인하고 `clauses.py`에 손질본을 적는다.
+
+```bash
+python3 -c "
+import re,json,pathlib
+D=json.loads(re.search(r'var DATA = (\[.*?\]);',pathlib.Path('study.html').read_text(),re.S).group(1))
+for p in sorted(D,key=lambda x:-x['w'])[:25]: print(p['k'], p['w'], p['en'][:90])"
+```
+
+`clauses.py`의 형식:
+
+```python
+FIX = {
+  "d282e8a9": dict(
+      skel="Empirical values … define whether …, and define the relevant part of the signal",
+      c=[[0, "Empirical values"],
+         [1, "not statistically compatible with the null model"],
+         [0, "define, on a node-by-node basis,"],
+         ...]),
+}
+```
+
+`skel`(뼈대)은 수식어를 걷어낸 주어·동사·목적어다. 실제로 막힐 때 가장 먼저 필요한 것이
+이것이라 절 분해보다 위에 보여 준다. `c`의 0단계가 주절이며 굵게 표시된다.
+
+세션 크기와 복습 간격은 `build_study.py`의 `SIZE`와 `grade()`에 있다.
