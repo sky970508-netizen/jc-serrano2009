@@ -31,17 +31,17 @@ body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);
 #bar{position:fixed;top:0;left:0;right:0;height:56px;z-index:60;display:flex;align-items:center;
   gap:14px;padding:0 16px;background:color-mix(in srgb,var(--panel) 88%,transparent);
   backdrop-filter:saturate(180%) blur(14px);border-bottom:1px solid var(--line)}
-#bar .brand{font-weight:700;font-size:.85rem;letter-spacing:-.01em;white-space:nowrap;
+#bar .brand{flex:0 1 auto;min-width:0;font-weight:700;font-size:.85rem;letter-spacing:-.01em;white-space:nowrap;
   overflow:hidden;text-overflow:ellipsis;color:var(--ink)}
 #bar .brand small{display:block;font-weight:400;color:var(--muted);font-size:.75rem}
 #bar .spacer{flex:1}
-.seg{display:flex;border:1px solid var(--line);border-radius:9px;overflow:hidden;background:var(--bg)}
+.seg{display:flex;flex:0 0 auto;border:1px solid var(--line);border-radius:9px;overflow:hidden;background:var(--bg)}
 .seg button{border:0;background:transparent;color:var(--ink-2);font:inherit;font-size:.8rem;
   padding:6px 11px;cursor:pointer;white-space:nowrap;font-family:var(--sans)}
 .seg button+button{border-left:1px solid var(--line)}
 .seg button[aria-pressed="true"]{background:var(--accent);color:#fff}
 .iconbtn{border:1px solid var(--line);background:var(--bg);color:var(--ink-2);border-radius:9px;
-  width:34px;height:32px;cursor:pointer;font-size:.9rem;line-height:1;font-family:var(--sans)}
+  flex:0 0 auto;width:34px;height:32px;cursor:pointer;font-size:.9rem;line-height:1;font-family:var(--sans)}
 .iconbtn:hover{border-color:var(--accent);color:var(--accent)}
 #prog{position:fixed;top:56px;left:0;height:2px;background:var(--accent);z-index:61;width:0}
 
@@ -147,11 +147,11 @@ body[data-guide="off"] .guide{display:none!important}
 
 /* ── 용어 사전 */
 .gl{border-bottom:1px dotted var(--muted);cursor:help;position:relative}
-.gl::after{content:attr(data-def);position:absolute;left:0;top:calc(100% + 7px);z-index:50;
-  width:max-content;max-width:300px;padding:9px 12px;background:var(--ink);color:var(--bg);
-  border-radius:9px;font-size:.78rem;line-height:1.6;white-space:normal;text-indent:0;
-  opacity:0;visibility:hidden;transition:opacity .12s;box-shadow:0 6px 20px rgba(0,0,0,.25);text-align:left}
-.gl:hover::after{opacity:1;visibility:visible}
+.gl::after{content:attr(data-def);display:none;position:absolute;left:0;top:calc(100% + 7px);z-index:50;
+  width:max-content;max-width:min(300px,72vw);padding:9px 12px;background:var(--ink);color:var(--bg);
+  border-radius:9px;font-size:.78rem;line-height:1.6;white-space:normal;text-indent:0;font-weight:400;
+  box-shadow:0 6px 20px rgba(0,0,0,.25);text-align:left}
+.gl:hover::after,.gl:focus::after{display:block}
 
 /* ── 하이라이트 */
 mark.hl{background:var(--mark);color:inherit;padding:1px 0;border-radius:2px;cursor:pointer}
@@ -406,12 +406,19 @@ main a{color:var(--accent)}
 }
 /* 휴대폰: 상단 바를 화면 폭에 맞춰 접고, 한 손 읽기에 맞게 여백을 줄인다 */
 @media(max-width:700px){
-  #bar{gap:8px;padding:0 12px}
+  /* 좌우로 끌리지 않게 못 박는다 — 넓은 표·수식은 각자 상자 안에서만 스크롤된다 */
+  html,body{overflow-x:hidden;max-width:100%}
+  #bar{gap:6px;padding:0 10px}
   #bar .brand{display:none}
   #helpbtn{display:none}
   .iconbtn{width:32px}
-  .seg button{padding:6px 10px;font-size:.78rem}
+  .iconbtn.wideonly{display:none}      /* 가이드 토글·글자 크기는 데스크톱에서만 */
+  .seg button{padding:6px 7px;font-size:.73rem}
   .seg button.wideonly{display:none}   /* 2단은 넓은 화면에서만 의미가 있다 */
+  /* 용어 정의는 화면 아래 띠로 — 오른쪽 끝 단어에서도 잘리지 않는다 */
+  .gl::after{position:fixed;left:10px;right:10px;top:auto;bottom:14px;width:auto;max-width:none}
+  .ptable{overflow-x:auto;-webkit-overflow-scrolling:touch}
+  table.pnas{min-width:430px}
   .seg button .lg{display:none}
   .seg button .sm{display:inline}
   main{padding:74px 14px 100px}
@@ -457,7 +464,7 @@ main a{color:var(--accent)}
     <button data-view="ko">한글</button>
     <button data-view="en"><span class="lg">English</span><span class="sm">EN</span></button>
     <button data-view="paper" title="원문 PNAS 2단 조판 (P)">논문</button>
-    <button data-view="paperko" title="한글판 2단 조판 (P를 다시 누르면 전환)"><span class="lg">논문·한글</span><span class="sm">논문한</span></button>
+    <button data-view="paperko" title="한글판 2단 조판 (P를 다시 누르면 전환)"><span class="lg">논문·한글</span><span class="sm">논한</span></button>
   </div>
   <button class="iconbtn wideonly" id="guidebtn" title="공부 가이드 켜기/끄기 (G)">✦</button>
   <button class="iconbtn" id="notesbtn" title="내 노트 (N)">✎<span id="notecount"></span></button>
