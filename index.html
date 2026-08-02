@@ -14,6 +14,7 @@
   --shadow:0 1px 2px rgba(30,25,20,.06),0 8px 24px rgba(30,25,20,.05);
   --fs:17px; --serif:"Iowan Old Style","Charter",Georgia,"Times New Roman",serif;
   --sans:-apple-system,BlinkMacSystemFont,"Pretendard","Apple SD Gothic Neo","Noto Sans KR",system-ui,sans-serif;
+  --serif-ko:"Iowan Old Style","Charter",Georgia,"AppleMyungjo","Nanum Myeongjo","Noto Serif KR","Batang",serif;
 }
 html[data-theme="dark"]{
   --bg:#14161a; --panel:#1b1e24; --ink:#e6e6e4; --ink-2:#b9bec6; --muted:#7d848e;
@@ -195,61 +196,81 @@ mark.hl.flash{outline:2px solid var(--accent);outline-offset:2px}
   margin-left:3px;display:none}
 #notecount.on{display:inline}
 
-/* ── 논문 원문 모드 (PNAS 2단) */
-body[data-view="paper"] main{max-width:calc(264px + 1060px);font-family:var(--serif);
+/* ── 논문 모드 (PNAS 2단) — "paper"(원문) / "paperko"(한글판) 공통 */
+body[data-view^="paper"] main{max-width:calc(264px + 1060px);font-family:var(--serif);
   column-count:2;column-gap:34px;text-align:justify;hyphens:auto;font-size:.9rem;line-height:1.5}
-body[data-view="paper"] .para{display:block;text-indent:1.15em;margin:0}
-body[data-view="paper"] .para.cont{text-indent:0}
-body[data-view="paper"] .pair{display:inline;margin:0;padding:0;border:0;background:none;border-radius:0}
+body[data-view^="paper"] .para{display:block;text-indent:1.15em;margin:0}
+body[data-view^="paper"] .para.cont{display:inline;text-indent:0}
+body[data-view^="paper"] .pair{display:inline;margin:0;padding:0;border:0;background:none;border-radius:0}
+body[data-view^="paper"] .guide,
+body[data-view^="paper"] .summary,
+body[data-view^="paper"] .note,
+body[data-view^="paper"] hr.rule{display:none}
+body[data-view^="paper"] .masthead{column-span:all;text-align:center;border-bottom:1px solid var(--ink)}
+body[data-view^="paper"] details.fm{column-span:all;text-align:center;font-size:.78rem}
+body[data-view^="paper"] details.fm summary{display:none}
+body[data-view^="paper"] h2.sec{font-size:1.02rem;margin:14px 0 4px;border:0;padding:0;text-align:left;
+  font-weight:700}
+body[data-view^="paper"] h3.sec,body[data-view^="paper"] h4.sec{font-size:1em;font-weight:700;
+  color:var(--ink);text-align:left;float:left;margin:0 .45em 0 0;padding:0}
+body[data-view^="paper"] h3.sec::after,body[data-view^="paper"] h4.sec::after{content:"."}
+body[data-view^="paper"] .anchor{display:none}
+/* 원문 배치 그대로: 표1·그림1·2·3·5는 한 단 폭, 그림 4만 두 단에 걸친다
+   (PDF 캡션 줄의 가로 범위로 확인 — 그림 4만 x 52→560 전폭) */
+body[data-view^="paper"] figure.figure{column-span:none;break-inside:avoid;page-break-inside:avoid;
+  border:0;background:none;box-shadow:none;margin:14px 0 16px;padding:0;text-indent:0}
+body[data-view^="paper"] figure.figure img{max-height:none;width:100%}
+body[data-view^="paper"] figure.figure .zoomhint{display:none}
+body[data-view^="paper"] figure.figure figcaption{font-size:.74rem;padding:7px 0 0;text-indent:0}
+body[data-view^="paper"] #fig-4{column-span:all;margin:18px 0 20px}
+body[data-view^="paper"] .ptable{background:none;border:0;box-shadow:none;padding:0;margin:14px 0 18px;
+  break-inside:avoid;text-indent:0}
+body[data-view^="paper"] .ptable .tcap{font-size:.74rem;line-height:1.4;margin-bottom:8px}
+body[data-view^="paper"] table.pnas{font-size:.74rem;min-width:0}
+body[data-view^="paper"] table.pnas th,body[data-view^="paper"] table.pnas td{padding:3px 6px}
+body[data-view^="paper"] table.pnas td.gapcol,body[data-view^="paper"] table.pnas th.gapcol{width:12px}
+/* 인쇄물처럼 보이도록 링크 색을 죽인다 (클릭은 그대로 된다) */
+body[data-view^="paper"] a.xref,body[data-view^="paper"] a.cite{color:inherit;border-bottom:0}
+body[data-view^="paper"] a.xref:hover,body[data-view^="paper"] a.cite:hover{color:var(--accent)}
+body[data-view^="paper"] .tablewrap{column-span:none;break-inside:avoid;text-indent:0}
+body[data-view^="paper"] .eqwrap{break-inside:avoid;background:none;border:0;box-shadow:none;
+  margin:8px 0;padding:0 2.2em 0 0;text-indent:0;text-align:center}
+body[data-view^="paper"] .eqwrap .eqno{right:0}
+body[data-view^="paper"] ol.refs li{font-size:.76rem;text-indent:0}
+body[data-view^="paper"] p.solo{text-indent:0}
+
+/* 원문판 */
 body[data-view="paper"] .pair .en{display:inline;font-size:1em;color:var(--ink);
   font-family:var(--serif);line-height:inherit}
 body[data-view="paper"] .pair .ko,
-body[data-view="paper"] .guide,
-body[data-view="paper"] .summary,
-body[data-view="paper"] .note,
-body[data-view="paper"] hr.rule{display:none}
-body[data-view="paper"] .masthead{column-span:all;text-align:center;border-bottom:1px solid var(--ink)}
-body[data-view="paper"] .masthead h1{display:none}
+body[data-view="paper"] .masthead h1,
+body[data-view="paper"] .hko,
+body[data-view="paper"] .ptable .tcap.ko,
+body[data-view="paper"] .cap-ko{display:none}
 body[data-view="paper"] .masthead .orig{font-size:1.7rem;font-style:normal;font-weight:600;
   color:var(--ink);line-height:1.25;margin-bottom:10px;text-align:center}
-body[data-view="paper"] details.fm{column-span:all;text-align:center;font-size:.78rem}
-body[data-view="paper"] details.fm summary{display:none}
-body[data-view="paper"] .para.cont{display:inline}
-body[data-view="paper"] h2.sec{font-size:1.02rem;margin:14px 0 4px;border:0;padding:0;text-align:left;
-  font-weight:700}
-body[data-view="paper"] h3.sec,body[data-view="paper"] h4.sec{font-size:1em;font-weight:700;
-  color:var(--ink);text-align:left;float:left;margin:0 .45em 0 0;padding:0}
-body[data-view="paper"] h3.sec::after,body[data-view="paper"] h4.sec::after{content:"."}
-body[data-view="paper"] .anchor{display:none}
-body[data-view="paper"] .hko{display:none}
 body[data-view="paper"] .hen{font-size:1em;font-weight:inherit;color:inherit}
 body[data-view="paper"] .hen::before,body[data-view="paper"] .hen::after{content:none}
-/* 원문 배치 그대로: 표1·그림1·2·3·5는 한 단 폭, 그림 4만 두 단에 걸친다
-   (PDF 캡션 줄의 가로 범위로 확인 — 그림4만 x 52→560 전폭) */
-body[data-view="paper"] figure.figure{column-span:none;break-inside:avoid;page-break-inside:avoid;
-  border:0;background:none;box-shadow:none;margin:14px 0 16px;padding:0;text-indent:0}
-body[data-view="paper"] figure.figure img{max-height:none;width:100%}
-body[data-view="paper"] figure.figure .zoomhint{display:none}
-body[data-view="paper"] figure.figure figcaption{font-size:.74rem;padding:7px 0 0;text-indent:0}
-body[data-view="paper"] .cap-en{font-size:.74rem;line-height:1.4}
-body[data-view="paper"] .ptable{background:none;border:0;box-shadow:none;padding:0;margin:14px 0 18px;
-  break-inside:avoid;text-indent:0}
-body[data-view="paper"] .ptable .tcap{font-size:.74rem;line-height:1.4;margin-bottom:8px}
-body[data-view="paper"] .ptable .tcap.ko{display:none}
-body[data-view="paper"] table.pnas{font-size:.74rem;min-width:0}
-body[data-view="paper"] table.pnas th,body[data-view="paper"] table.pnas td{padding:3px 6px}
-body[data-view="paper"] table.pnas td.gapcol,body[data-view="paper"] table.pnas th.gapcol{width:12px}
-/* 인쇄물처럼 보이도록 링크 색을 죽인다 (클릭은 그대로 된다) */
-body[data-view="paper"] a.xref,body[data-view="paper"] a.cite{color:inherit;border-bottom:0}
-body[data-view="paper"] a.xref:hover,body[data-view="paper"] a.cite:hover{color:var(--accent)}
-body[data-view="paper"] #fig-4{column-span:all;margin:18px 0 20px}
-body[data-view="paper"] .tablewrap{column-span:none;break-inside:avoid;text-indent:0}
-body[data-view="paper"] .eqwrap{break-inside:avoid}
-body[data-view="paper"] .eqwrap{background:none;border:0;box-shadow:none;margin:8px 0;
-  padding:0 2.2em 0 0;text-indent:0;text-align:center}
-body[data-view="paper"] .eqwrap .eqno{right:0}
-body[data-view="paper"] ol.refs li{font-size:.76rem;text-indent:0}
-body[data-view="paper"] p.solo{text-indent:0}
+body[data-view="paper"] .cap-en{font-size:.74rem;line-height:1.4;color:var(--ink)}
+
+/* 한글판 — 라틴 글자는 세리프, 한글은 명조 계열로 자동 폴백된다 */
+body[data-view="paperko"] main{font-family:var(--serif-ko);line-height:1.72;font-size:.92rem;
+  word-break:normal;line-break:strict;hyphens:none}   /* 한글 인쇄물처럼 음절 단위로 줄바꿈 */
+body[data-view="paperko"] .pair .ko{display:inline;font-size:1em;color:var(--ink);
+  font-family:inherit;line-height:inherit}
+body[data-view="paperko"] .pair .en,
+body[data-view="paperko"] .hen,
+body[data-view="paperko"] .cap-en{display:none}
+body[data-view="paperko"] .ptable .tcap{display:none}
+body[data-view="paperko"] .ptable{display:flex;flex-direction:column}
+body[data-view="paperko"] .ptable .tcap.ko{display:block;order:-1;font-family:inherit;
+  font-size:.76rem;line-height:1.55;margin:0 0 8px}   /* 표 캡션은 표 위로 */
+body[data-view="paperko"] .masthead h1{font-size:1.6rem;margin-bottom:5px}
+body[data-view="paperko"] .masthead .orig{font-size:.88rem;color:var(--ink-2);margin-bottom:12px}
+body[data-view="paperko"] .hko{font-size:1em;font-weight:inherit;color:inherit}
+body[data-view="paperko"] .cap-ko{font-size:.76rem;line-height:1.6;margin-top:0}
+body[data-view="paperko"] .gl{border-bottom:0}   /* 조판 화면에서는 용어 밑줄을 빼고 툴팁만 남긴다 */
+body[data-view="paperko"] p.solo,body[data-view="paperko"] ol.refs li{font-family:var(--serif-ko)}
 
 /* ── 수식 */
 .eqwrap{position:relative;margin:22px 0;padding:16px 54px 16px 20px;background:var(--panel);
@@ -278,7 +299,7 @@ figure.figure figcaption{display:block}
 .cap-ko{display:block;margin-top:6px;font-size:.84rem;line-height:1.65;color:var(--ink-2)}
 body[data-view="ko"] .cap-en{display:none}
 body[data-view="en"] .cap-ko,body[data-view="paper"] .cap-ko{display:none}
-body[data-view="en"] .cap-en,body[data-view="paper"] .cap-en{color:var(--ink)}
+body[data-view="en"] .cap-en{color:var(--ink)}
 
 /* ── 원문 Table 1 (이미지 대신 실제 표) */
 .ptable{margin:30px 0;padding:16px 20px 14px;background:var(--panel);border:1px solid var(--line);
@@ -408,7 +429,7 @@ main a{color:var(--accent)}
   .eqwrap{padding:14px 16px;margin-left:-14px;margin-right:-14px;border-radius:0}
   .eqwrap .eqno{position:static;transform:none;display:block;text-align:right;margin-top:8px}
   .tablewrap{margin-left:-14px;margin-right:-14px;padding:0 14px}
-  body[data-view="paper"] main{column-count:1;font-size:.95rem}
+  body[data-view^="paper"] main{column-count:1;font-size:.95rem}
   .gl::after{max-width:min(78vw,300px)}
   #toc{width:min(84vw,300px)}
   #tocmask{position:fixed;inset:56px 0 0;background:rgba(0,0,0,.35);z-index:39;display:none}
@@ -436,6 +457,7 @@ main a{color:var(--accent)}
     <button data-view="ko">한글</button>
     <button data-view="en"><span class="lg">English</span><span class="sm">EN</span></button>
     <button data-view="paper" title="원문 PNAS 2단 조판 (P)">논문</button>
+    <button data-view="paperko" title="한글판 2단 조판 (P를 다시 누르면 전환)"><span class="lg">논문·한글</span><span class="sm">논문한</span></button>
   </div>
   <button class="iconbtn wideonly" id="guidebtn" title="공부 가이드 켜기/끄기 (G)">✦</button>
   <button class="iconbtn" id="notesbtn" title="내 노트 (N)">✎<span id="notecount"></span></button>
@@ -877,7 +899,7 @@ main a{color:var(--accent)}
 
 <div id="help">
   <b>단축키</b><br>
-  <kbd>1</kbd> 교차 <kbd>2</kbd> 2단 <kbd>3</kbd> 한글 <kbd>4</kbd> English <kbd>P</kbd> 논문<br>
+  <kbd>1</kbd> 교차 <kbd>2</kbd> 2단 <kbd>3</kbd> 한글 <kbd>4</kbd> English<br><kbd>P</kbd> 논문 조판 (다시 누르면 한글판)<br>
   <kbd>J</kbd>/<kbd>K</kbd> 다음/이전 섹션 · <kbd>M</kbd> 목차<br>
   <kbd>N</kbd> 내 노트 · <kbd>G</kbd> 가이드 · <kbd>T</kbd> 테마<br>
   <kbd>+</kbd>/<kbd>−</kbd> 글자 크기<br>
@@ -910,7 +932,7 @@ main a{color:var(--accent)}
   function setView(v){
     document.body.dataset.view=v;
     $$('#views button').forEach(function(b){ b.setAttribute('aria-pressed', b.dataset.view===v); });
-    if(v==='paper') $$('details.fm').forEach(function(d){ d.open=true; });
+    if(v.indexOf('paper')===0) $$('details.fm').forEach(function(d){ d.open=true; });
     S.set('view',v);
   }
   $$('#views button').forEach(function(b){ b.onclick=function(){ setView(b.dataset.view); }; });
@@ -1222,7 +1244,7 @@ main a{color:var(--accent)}
     else if(C==='2') setView('side');
     else if(C==='3') setView('ko');
     else if(C==='4') setView('en');
-    else if(C==='5'||C==='p') setView('paper');
+    else if(C==='5'||C==='p') setView(document.body.dataset.view==='paper'?'paperko':'paper');
     else if(C==='g') $('#guidebtn').click();
     else if(C==='n') openNotes();
     else if(C==='t') $('#theme').click();
